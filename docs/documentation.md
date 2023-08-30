@@ -22,6 +22,9 @@
 ![app structure](app_structure.png)
 
 # Log
+30.08.2023
+- Add mockups to documentation
+
 25.08.2023
 - Basic folder structure
 - App structure
