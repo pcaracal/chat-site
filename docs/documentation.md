@@ -11,6 +11,12 @@
 
 
 ## Mockups / Wireframes
+### Login
+![login](mockups/Login.png)
+### Overview
+![overview](mockups/Overview.png)
+### Chat Channel
+![chat](mockups/Chat.png)
 
 ## App Structure
 ![app structure](app_structure.png)
