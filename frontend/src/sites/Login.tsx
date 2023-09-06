@@ -21,12 +21,9 @@ export default function Login() {
         body: JSON.stringify(requestBody),
       });
       if (response.ok) {
-        // Successful request
-        const responseData = await response.json();
-        console.log('Login successful:', responseData);
+        return await response.json();
       } else {
-        // Failed request
-        console.error('Login failed:', response.status, response.statusText);
+        return false;
       }
     } catch (error) {
       console.error('An error occurred:', error);
@@ -46,14 +43,17 @@ export default function Login() {
           <button type='submit' onClick={(e) => {
             e.preventDefault();
             if (username.trim() && password) {
-              const e_username: string = sha256(username.trim());
+              const e_username: string = username.trim().toLowerCase() //sha256(username.trim());
               const e_password: string = sha256(password);
 
-              // remove this later
-              console.log(e_username, e_password);
-
-              handleLogin(e_username, e_password).then(void 0);
-              // TODO: void 0 -> replace with set cookie to browser
+              handleLogin(e_username, e_password).then(r => {
+                if (!r) {
+                  console.error("Login fail.");
+                  return;
+                }
+                localStorage.setItem("Authorization", "Bearer " + r.token);
+              });
+              
               // Cookie acquired -> redirect to overview site
             }
           }}>Login

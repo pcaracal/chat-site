@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,23 +25,37 @@ namespace BackendApp.Controllers {
       return new string[] { "value1", "value2" };
     }
 
-    // GET: api/login/5
-    [HttpGet("{id}", Name = "Get")]
-    public string Get(int id) {
-      return "value";
-    }
-
     // POST: api/login
     [HttpPost]
     public IActionResult Post([FromBody] Login login) {
       // TODO: Replace this with searching a database later
-      // current test values: "user", "pw" hashed with SHA256
-      if (!(login.Username == "04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb" && login.Password == "30c952fab122c3f9759f02a6d95c3758b246b4fee239957b2d4fee46e26170c4")) {
+      string ePassword = GenerateSHA512(login.Password);
+
+      Console.WriteLine($"Login attempt\nUsername: {login.Username}\nPassword: {ePassword}");
+
+      // current test values: "user", "pw" in cleartext (clear -> SHA256 -> SHA512)
+      string tempUsername = "user";
+      string tempPassword =
+        "e0465998226d5f0ddfa9f9b942614a7aa9071a7c1b6f6dd9ae4a5a3dee0b381be88514103481f095b69d317e582a17fb3988485258c2c74f3a624803db5d4289";
+
+      if (!(login.Username == tempUsername && ePassword == tempPassword)) {
+        Console.WriteLine("Login fail");
         return Unauthorized();
       }
 
       var token = GenerateJwtToken(login.Username);
-      return Ok(new { token });
+      Console.WriteLine("Login success");
+      return Ok(new { token, login.Username, ePassword });
+    }
+
+    // PUT: api/login/5
+    [HttpPut("{id}")]
+    public void Put(int id, [FromBody] string value) {
+    }
+
+    // DELETE: api/login/5
+    [HttpDelete("{id}")]
+    public void Delete(int id) {
     }
 
 
@@ -65,14 +80,17 @@ namespace BackendApp.Controllers {
       return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    // PUT: api/login/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value) {
-    }
+    // Helper method to generate a SHA512 hash
+    private string GenerateSHA512(string input) {
+      byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+      byte[] hashBytes = SHA512.HashData(inputBytes);
+      StringBuilder sb = new StringBuilder();
 
-    // DELETE: api/login/5
-    [HttpDelete("{id}")]
-    public void Delete(int id) {
+      foreach (byte b in hashBytes) {
+        sb.Append(b.ToString("x2"));
+      }
+
+      return sb.ToString();
     }
   }
 }
