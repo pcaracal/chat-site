@@ -49,6 +49,9 @@ export default function Login() {
               const e_username: string = sha256(username.trim());
               const e_password: string = sha256(password);
 
+              // remove this later
+              console.log(e_username, e_password);
+
               handleLogin(e_username, e_password).then(void 0);
               // TODO: void 0 -> replace with set cookie to browser
               // Cookie acquired -> redirect to overview site
