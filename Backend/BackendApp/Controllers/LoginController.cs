@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BackendApp.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BackendApp.Controllers {
@@ -15,44 +12,43 @@ namespace BackendApp.Controllers {
   [ApiController]
   public class LoginController : ControllerBase {
     private readonly IConfiguration _configuration;
+    private readonly ApplicationDbContext _context;
 
-    public LoginController(IConfiguration configuration) {
+    public LoginController(IConfiguration configuration, ApplicationDbContext context) {
       _configuration = configuration;
+      _context = context;
     }
 
     // GET: api/login
     [HttpGet]
-    [Authorize(AuthenticationSchemes = "Bearer")]
-    public IEnumerable<string> Get() {
-      return new string[] { "value1", "value2" };
+    // [Authorize(AuthenticationSchemes = "Bearer")]
+    public IActionResult Get() {
+      // string username = DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+
+      try {
+        var users = _context.user.ToList();
+        return Ok(users);
+      }
+      catch (Exception e) {
+        return BadRequest($"Error: {e.Message}");
+      }
     }
 
     // POST: api/login
     [HttpPost]
     public IActionResult Post([FromBody] Login login) {
       // TODO: Replace this with searching a database later
-      string ePassword = GenerateSHA512(login.Password);
+      string ePassword = GenerateSHA512(login.password);
 
-      Console.WriteLine($"Login attempt\nUsername: {login.Username}\nPassword: {ePassword}");
-
-      // current test values: "user", "pw" in cleartext (clear -> SHA256 -> SHA512)
-      string tempUsername = "user";
-      string tempPassword =
-        "e0465998226d5f0ddfa9f9b942614a7aa9071a7c1b6f6dd9ae4a5a3dee0b381be88514103481f095b69d317e582a17fb3988485258c2c74f3a624803db5d4289";
-
-      if (!(login.Username == tempUsername && ePassword == tempPassword)) {
-        Console.WriteLine("Login fail");
-        return Unauthorized();
-      }
-
-      var token = GenerateJwtToken(login.Username);
+      var token = GenerateJwtToken(login.username);
       Console.WriteLine("Login success");
-      return Ok(new { token, login.Username, ePassword });
+      return Ok(new { token, Username = login.username });
     }
 
-    // DELETE: api/login/5
-    [HttpDelete("{id}")]
-    public void Delete(int id) {
+    // DELETE: api/login
+    [HttpDelete]
+    public void Delete() {
+      // TODO: Invalidate token
     }
 
 
@@ -75,6 +71,15 @@ namespace BackendApp.Controllers {
       );
 
       return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    // Helper method to generate a Bearer token to get a user's username which was used to generate the Bearer token
+    private string DecodeJwtToken(string token) {
+      var handler = new JwtSecurityTokenHandler();
+      var jsonToken = handler.ReadToken(token);
+      var tokenS = jsonToken as JwtSecurityToken;
+      var username = tokenS.Claims.First(claim => claim.Type == "sub").Value;
+      return username;
     }
 
     // Helper method to generate a SHA512 hash
