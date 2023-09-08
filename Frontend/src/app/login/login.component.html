@@ -1,12 +1,23 @@
 <div class="container">
   <h1>Le Chat</h1>
   <article>
-    <form>
+    <form *ngIf="isLogin">
       <input id="username" type="text" placeholder="Username" required (keyup)="keyUpUsername($event)"/>
       <input id="password" type="password" placeholder="Password" required (keyup)="keyUpPassword($event)"/>
       <small>Your data is stored safely and we do not have access to it.</small>
-      
+
       <input type="submit" role="button" value="Login" (click)="handleLogin($event)"/>
+      <input type="button" role="button" value="Register" (click)="isLogin = false"/>
+    </form>
+
+    <form *ngIf="!isLogin">
+      <input id="registerUsername" type="text" placeholder="Username" required (keyup)="keyUpUsername($event)"/>
+      <input id="registerPassword" type="password" placeholder="Password" required (keyup)="keyUpPassword($event)"/>
+      <input id="registerPasswordRepeat" type="password" placeholder="Repeat password" required
+             (keyup)="keyUpPasswordRepeat($event)" [attr.aria-invalid]="!passwordRepeatValid"/>
+      <small>Your data is stored safely and we do not have access to it.</small>
+
+      <input type="submit" role="button" value="Register" (click)="handleRegister($event)"/>
     </form>
 
     <button [ngClass]="loginSuccessful ? 'outline' : 'outline secondary'" (click)="handleCheckLogin($event)">Test login

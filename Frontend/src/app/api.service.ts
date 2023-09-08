@@ -24,6 +24,20 @@ export class ApiService {
     return this._http.post(this._apiUrl + "login", body, httpOptions);
   }
 
+  registerPost(username: string, password: string): Observable<any> {
+    const body = {
+      username: username,
+      password: password
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+    return this._http.post(this._apiUrl + "register", body, httpOptions);
+  }
+
+
   // This function is temporary code delete it later
   loginGet(): Observable<any> {
     const httpOptions = {

@@ -20,6 +20,8 @@ export class LoginComponent {
   private _password: string = "";
 
   loginSuccessful: boolean = false;
+  isLogin: boolean = true;
+  passwordRepeatValid: boolean = false;
 
   keyUpUsername(event: KeyboardEvent) {
     this._username = (event.target as HTMLInputElement).value;
@@ -27,6 +29,11 @@ export class LoginComponent {
 
   keyUpPassword(event: KeyboardEvent) {
     this._password = (event.target as HTMLInputElement).value;
+  }
+
+  keyUpPasswordRepeat(event: KeyboardEvent) {
+    const passwordRepeat: string = (event.target as HTMLInputElement).value;
+    this.passwordRepeatValid = this._password === passwordRepeat;
   }
 
   handleLogin(event: Event) {
@@ -42,9 +49,29 @@ export class LoginComponent {
           console.log("Login successful", response);
           this.setBearerToken(response.token);
         },
-        error: (error) => {
+        error: (error: any) => {
           // TODO: Handle stuff like 401
           // console.log("Login failed", error);
+        }
+      });
+    }
+  }
+
+  handleRegister(event: Event) {
+    event.preventDefault();
+    if (this._username.trim() && this._password && this.passwordRepeatValid) {
+      const e_username: string = this._username.trim().toLowerCase();
+      const e_password: string = sha256(this._password);
+      // Remove log later
+      console.log(`Register: Username: ${e_username} | Password: ${e_password}`);
+
+      this.apiService.registerPost(e_username, e_password).subscribe({
+        next: (response: any) => {
+          console.log("Register successful", response);
+          this.setBearerToken(response.token);
+        },
+        error: (error: any) => {
+          // TODO: Handle stuff like 401, 409, etc.
         }
       });
     }
