@@ -6,6 +6,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+
   const handleLogin = async (e_username: string, e_password: string) => {
     try {
       const requestBody = {
@@ -53,7 +54,6 @@ export default function Login() {
                 }
                 localStorage.setItem("Authorization", "Bearer " + r.token);
               });
-              
               // Cookie acquired -> redirect to overview site
             }
           }}>Login
