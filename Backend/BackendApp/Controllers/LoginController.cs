@@ -50,11 +50,6 @@ namespace BackendApp.Controllers {
       return Ok(new { token, login.Username, ePassword });
     }
 
-    // PUT: api/login/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value) {
-    }
-
     // DELETE: api/login/5
     [HttpDelete("{id}")]
     public void Delete(int id) {
