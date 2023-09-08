@@ -5,15 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(options =>
-{
+builder.Services.AddAuthentication(options => {
   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
   options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
   options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
-{
-  o.TokenValidationParameters = new TokenValidationParameters
-  {
+}).AddJwtBearer(o => {
+  o.TokenValidationParameters = new TokenValidationParameters {
     ValidIssuer = builder.Configuration["Jwt:Issuer"],
     ValidAudience = builder.Configuration["Jwt:Audience"],
     IssuerSigningKey = new SymmetricSecurityKey
@@ -51,9 +48,6 @@ if (app.Environment.IsDevelopment()) {
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-
-// REMOVE LATER, tests auth
-app.MapGet("/get", () => "Auth!").RequireAuthorization();
 
 app.UseHttpsRedirection();
 

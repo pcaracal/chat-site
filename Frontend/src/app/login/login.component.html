@@ -5,7 +5,12 @@
       <input id="username" type="text" placeholder="Username" required (keyup)="keyUpUsername($event)"/>
       <input id="password" type="password" placeholder="Password" required (keyup)="keyUpPassword($event)"/>
       <small>Your data is stored safely and we do not have access to it.</small>
+      
       <input type="submit" role="button" value="Login" (click)="handleLogin($event)"/>
     </form>
+
+    <button [ngClass]="loginSuccessful ? 'outline' : 'outline secondary'" (click)="handleCheckLogin($event)">Test login
+      status
+    </button>
   </article>
 </div>

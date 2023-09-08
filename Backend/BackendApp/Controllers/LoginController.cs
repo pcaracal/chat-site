@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace BackendApp.Controllers {
 
     // GET: api/login
     [HttpGet]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public IEnumerable<string> Get() {
       return new string[] { "value1", "value2" };
     }

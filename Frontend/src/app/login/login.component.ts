@@ -13,11 +13,13 @@ export class LoginComponent {
 
   setBearerToken(token: string) {
     const fullToken = `Bearer ${token}`;
-    localStorage.setItem("Authorization", token);
+    localStorage.setItem("Authorization", fullToken);
   }
 
   private _username: string = "";
   private _password: string = "";
+
+  loginSuccessful: boolean = false;
 
   keyUpUsername(event: KeyboardEvent) {
     this._username = (event.target as HTMLInputElement).value;
@@ -41,9 +43,25 @@ export class LoginComponent {
           this.setBearerToken(response.token);
         },
         error: (error) => {
-          console.log("Login failed", error);
+          // TODO: Handle stuff like 401
+          // console.log("Login failed", error);
         }
       });
     }
+  }
+
+  // Redundant code delete later
+  handleCheckLogin(event: Event) {
+    event.preventDefault();
+    this.apiService.loginGet().subscribe({
+      next: (response: any) => {
+        console.log("Check login successful", response);
+        this.loginSuccessful = true;
+      },
+      error: (error: any) => {
+        console.log("Check login failed", error);
+        this.loginSuccessful = false;
+      }
+    });
   }
 }

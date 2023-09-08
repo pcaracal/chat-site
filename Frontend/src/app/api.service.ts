@@ -23,4 +23,14 @@ export class ApiService {
     }
     return this._http.post(this._apiUrl + "login", body, httpOptions);
   }
+
+  // This function is temporary code delete it later
+  loginGet(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': localStorage.getItem("Authorization") || ""
+      })
+    }
+    return this._http.get(this._apiUrl + "login", httpOptions);
+  }
 }
