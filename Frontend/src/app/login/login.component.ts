@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {sha256} from "js-sha256";
 import {ApiService} from "../api.service";
 import * as bcrypt from "bcryptjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import * as bcrypt from "bcryptjs";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private router: Router) {
   }
 
   setBearerToken(token: string) {
@@ -49,6 +50,7 @@ export class LoginComponent {
         next: (response: any) => {
           console.log("Login successful", response);
           this.setBearerToken(response.token);
+          this.router.navigate(["/overview"]);
         },
         error: (error: any) => {
           // TODO: Handle stuff like 401
