@@ -33,5 +33,19 @@ namespace BackendApp.Controllers {
         return BadRequest($"Error: {e.Message}");
       }
     }
+
+    // POST: api/overview
+    /// <summary>
+    ///  Creates a new channel
+    /// </summary>
+    [HttpPost]
+    public IActionResult Post([FromBody] string name) {
+      string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+      int userId = _loginRepository.GetUser(username).id;
+      if (_overviewRepository.doesChannelExist(name)) return Conflict("Channel already exists");
+
+      _overviewRepository.createChannel(name, userId);
+      return Ok(name);
+    }
   }
 }

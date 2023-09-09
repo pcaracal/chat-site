@@ -43,11 +43,11 @@ create table message
 
 create table user_channel
 (
+    id            serial primary key,
     fk_user_id    integer not null
         constraint fk_user_id_uc
             references "user",
     fk_channel_id integer not null
         constraint fk_channel_id_uc
-            references channel,
-    primary key (fk_user_id, fk_channel_id)
+            references channel
 );

@@ -1,4 +1,5 @@
 ﻿using BackendApp.Interfaces;
+using BackendApp.Models;
 
 namespace BackendApp.Repositories;
 
@@ -20,5 +21,18 @@ public class OverviewRepository : IOverviewRepository {
     }
 
     return channels;
+  }
+
+  public bool doesChannelExist(string name) {
+    return _context.channel.Any(c => c.name == name);
+  }
+
+  public void createChannel(string name, int userId) {
+    Channel channel = new Channel(name, userId);
+    _context.channel.Add(channel);
+    _context.SaveChanges();
+    int channelId = _context.channel.First(c => c.name == name).id;
+    _context.user_channel.Add(new UserChannel(userId, channelId));
+    _context.SaveChanges();
   }
 }

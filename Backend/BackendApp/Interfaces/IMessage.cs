@@ -8,4 +8,5 @@ public interface IMessage {
   string text { get; set; }
   DateTime created_at { get; set; }
   int fk_channel_id { get; set; }
+  
 }
