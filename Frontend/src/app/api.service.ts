@@ -42,7 +42,7 @@ export class ApiService {
   loginGet(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': localStorage.getItem("Authorization") || ""
+        'Authorization': sessionStorage.getItem("Authorization") || ""
       })
     }
     return this._http.get(this._apiUrl + "login", httpOptions);

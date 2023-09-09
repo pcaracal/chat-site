@@ -1,6 +1,7 @@
 using System.Text;
 using BackendApp;
 using BackendApp.Controllers;
+using BackendApp.Interfaces;
 using BackendApp.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ using Npgsql;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));

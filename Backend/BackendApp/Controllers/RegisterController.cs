@@ -36,7 +36,7 @@ namespace BackendApp.Controllers {
       _context.user.Add(new Login(login.username, hashedPassword));
       _context.SaveChanges();
 
-      return Ok(_context.user.ToList().Last());
+      return Created("api/register", "User created");
     }
 
     private string GenerateArgon2Hash(string password) {

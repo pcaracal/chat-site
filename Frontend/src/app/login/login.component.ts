@@ -14,7 +14,7 @@ export class LoginComponent {
 
   setBearerToken(token: string) {
     const fullToken = `Bearer ${token}`;
-    localStorage.setItem("Authorization", fullToken);
+    sessionStorage.setItem("Authorization", fullToken);
   }
 
   private _username: string = "";

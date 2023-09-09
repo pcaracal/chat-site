@@ -2,7 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BackendApp.Interfaces;
 using BackendApp.Models;
+using BackendApp.Repositories;
+using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,17 +16,20 @@ namespace BackendApp.Controllers {
   public class LoginController : ControllerBase {
     private readonly IConfiguration _configuration;
     private readonly ApplicationDbContext _context;
+    private readonly ILoginRepository _loginRepository;
 
-    public LoginController(IConfiguration configuration, ApplicationDbContext context) {
+    public LoginController(IConfiguration configuration, ApplicationDbContext context,
+      ILoginRepository loginRepository) {
       _configuration = configuration;
       _context = context;
+      _loginRepository = loginRepository;
     }
 
     // GET: api/login
     [HttpGet]
-    // [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public IActionResult Get() {
-      // string username = DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+      string username = DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
 
       try {
         var users = _context.user.ToList();
@@ -37,10 +43,18 @@ namespace BackendApp.Controllers {
     // POST: api/login
     [HttpPost]
     public IActionResult Post([FromBody] Login login) {
-      
+      if (_context.user.FirstOrDefault(_login => _login.username == login.username) == null) {
+        return Unauthorized();
+      }
+
+      Login dbLogin = _context.user.First(_login => _login.username == login.username);
+      string hashedPassword = GenerateArgon2Hash(login.password);
+
+      if (hashedPassword != dbLogin.password) {
+        return Unauthorized();
+      }
 
       var token = GenerateJwtToken(login.username);
-      Console.WriteLine("Login success" + login.ToString());
       return Ok(new { token, Username = login.username });
     }
 
@@ -81,17 +95,18 @@ namespace BackendApp.Controllers {
       return username;
     }
 
-    // Helper method to generate a SHA512 hash
-    private string GenerateSHA512(string input) {
-      byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-      byte[] hashBytes = SHA512.HashData(inputBytes);
-      StringBuilder sb = new StringBuilder();
-
-      foreach (byte b in hashBytes) {
-        sb.Append(b.ToString("x2"));
+    // Yes, the same method is in RegisterController.cs
+    private string GenerateArgon2Hash(string password) {
+      // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+      string _out;
+      using (var hasher = new Argon2id(Encoding.UTF8.GetBytes(password))) {
+        hasher.DegreeOfParallelism = 1;
+        hasher.Iterations = 40;
+        hasher.MemorySize = 19456;
+        _out = Convert.ToBase64String(hasher.GetBytes(128));
       }
 
-      return sb.ToString();
+      return _out;
     }
   }
 }
