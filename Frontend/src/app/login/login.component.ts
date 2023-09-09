@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {sha256} from "js-sha256";
 import {ApiService} from "../api.service";
+import * as bcrypt from "bcryptjs";
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent {
 
   private _username: string = "";
   private _password: string = "";
+  private _passwordRepeat: string = "";
 
   loginSuccessful: boolean = false;
   isLogin: boolean = true;
@@ -29,20 +31,19 @@ export class LoginComponent {
 
   keyUpPassword(event: KeyboardEvent) {
     this._password = (event.target as HTMLInputElement).value;
+    this.passwordRepeatValid = this._password === this._passwordRepeat;
   }
 
   keyUpPasswordRepeat(event: KeyboardEvent) {
-    const passwordRepeat: string = (event.target as HTMLInputElement).value;
-    this.passwordRepeatValid = this._password === passwordRepeat;
+    this._passwordRepeat = (event.target as HTMLInputElement).value;
+    this.passwordRepeatValid = this._password === this._passwordRepeat;
   }
 
   handleLogin(event: Event) {
     event.preventDefault();
     if (this._username.trim() && this._password) {
       const e_username: string = this._username.trim().toLowerCase();
-      const e_password: string = sha256(this._password);
-      // Remove log later
-      console.log(`Username: ${e_username} | Password: ${e_password}`);
+      const e_password: string = this._password;
 
       this.apiService.loginPost(e_username, e_password).subscribe({
         next: (response: any) => {
@@ -61,9 +62,7 @@ export class LoginComponent {
     event.preventDefault();
     if (this._username.trim() && this._password && this.passwordRepeatValid) {
       const e_username: string = this._username.trim().toLowerCase();
-      const e_password: string = sha256(this._password);
-      // Remove log later
-      console.log(`Register: Username: ${e_username} | Password: ${e_password}`);
+      const e_password: string = this._password;
 
       this.apiService.registerPost(e_username, e_password).subscribe({
         next: (response: any) => {

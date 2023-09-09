@@ -37,11 +37,10 @@ namespace BackendApp.Controllers {
     // POST: api/login
     [HttpPost]
     public IActionResult Post([FromBody] Login login) {
-      // TODO: Replace this with searching a database later
-      string ePassword = GenerateSHA512(login.password);
+      
 
       var token = GenerateJwtToken(login.username);
-      Console.WriteLine("Login success");
+      Console.WriteLine("Login success" + login.ToString());
       return Ok(new { token, Username = login.username });
     }
 

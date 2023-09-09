@@ -13,9 +13,11 @@ public class Login : ILogin {
   public Login(string username, string password) {
     this.username = username;
     this.password = password;
+    created_at = DateTime.Now.ToUniversalTime();
   }
 
+
   public override string ToString() {
-    return $"id: {id}, username: {username}, password: {password}";
+    return $"id: {id}, username: {username}, password: {password}, created_at: {created_at}";
   }
 }

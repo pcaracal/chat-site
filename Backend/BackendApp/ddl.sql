@@ -1,43 +1,53 @@
-﻿DROP DATABASE IF EXISTS "chat_site_db";
-CREATE DATABASE "chat_site_db";
-\c "chat_site_db";
-   
-CREATE TABLE "user"
+﻿DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS channel CASCADE;
+DROP TABLE IF EXISTS message CASCADE;
+DROP TABLE IF EXISTS user_channel CASCADE;
+
+create table "user"
 (
-    "id"         SERIAL PRIMARY KEY,
-    "username"   VARCHAR(255) NOT NULL,
-    "password"   VARCHAR(255) NOT NULL,
-    "created_at" TIMESTAMP    NOT NULL,
-    CONSTRAINT "unique_username" UNIQUE ("username")
+    id         serial
+        primary key,
+    username   varchar(255) not null
+        constraint unique_username
+            unique,
+    password   varchar(255) not null,
+    created_at timestamp    not null
 );
 
-CREATE TABLE "message"
+create table channel
 (
-    "id"         SERIAL PRIMARY KEY,
-    "fk_user_id" INT          NOT NULL,
-    "text"       VARCHAR(255) NOT NULL,
-    "created_at" TIMESTAMP    NOT NULL,
-    CONSTRAINT "fk_user_id" FOREIGN KEY ("fk_user_id") REFERENCES "user" ("id")
+    id          serial
+        primary key,
+    name        varchar(255) not null
+        constraint unique_channel_name
+            unique,
+    created_at  timestamp    not null,
+    fk_admin_id integer      not null
+        constraint fk_admin_id
+            references "user"
 );
 
-CREATE TABLE "channel"
+create table message
 (
-    "id"          SERIAL PRIMARY KEY,
-    "name"        VARCHAR(255) NOT NULL,
-    "created_at"  TIMESTAMP    NOT NULL,
-    "fk_admin_id" INT          NOT NULL,
-    CONSTRAINT "unique_channel_name" UNIQUE ("name"),
-    CONSTRAINT "fk_admin_id" FOREIGN KEY ("fk_admin_id") REFERENCES "user" ("id")
+    id            serial
+        primary key,
+    fk_user_id    integer      not null
+        constraint fk_user_id
+            references "user",
+    text          varchar(255) not null,
+    created_at    timestamp    not null,
+    fk_channel_id integer
+        constraint fk_channel_id
+            references channel
 );
 
-CREATE TABLE "user_channel"
+create table user_channel
 (
-    "fk_user_id"    INT NOT NULL,
-    "fk_channel_id" INT NOT NULL,
-    PRIMARY KEY ("fk_user_id", "fk_channel_id"),
-    CONSTRAINT "fk_user_id_uc" FOREIGN KEY ("fk_user_id") REFERENCES "user" ("id"),
-    CONSTRAINT "fk_channel_id_uc" FOREIGN KEY ("fk_channel_id") REFERENCES "channel" ("id")
+    fk_user_id    integer not null
+        constraint fk_user_id_uc
+            references "user",
+    fk_channel_id integer not null
+        constraint fk_channel_id_uc
+            references channel,
+    primary key (fk_user_id, fk_channel_id)
 );
-
-ALTER TABLE "message" ADD COLUMN "fk_channel_id" INT;
-ALTER TABLE "message" ADD CONSTRAINT "fk_channel_id" FOREIGN KEY ("fk_channel_id") REFERENCES "channel" ("id");

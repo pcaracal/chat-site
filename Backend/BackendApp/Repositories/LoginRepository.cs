@@ -10,13 +10,12 @@ public class LoginRepository {
     _context = context;
   }
 
-  public string GetPassword(string username) {
-    var user = _context.Set<Login>().FirstOrDefault(u => u.username == username);
+  public bool CheckIfUserExists(string username) {
+    return _context.Set<Login>().Any(login => login.username == username);
+  }
 
-    if (user != null) {
-      return user.password;
-    }
-
-    throw new InvalidOperationException("User not found");
+  public void AddUser(Login login) {
+    _context.Set<Login>().Add(login);
+    _context.SaveChanges();
   }
 }
