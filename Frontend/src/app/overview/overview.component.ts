@@ -10,6 +10,8 @@ import {ApiService} from "../api.service";
 
 export class OverviewComponent implements OnInit {
   isLoggedIn: boolean = false;
+  isCreatingChannel: boolean = false;
+  createChannelName: string = "";
 
   public channels?: { id: number, name: string, created_at: string, fk_admin_id: number }[];
 
@@ -32,6 +34,24 @@ export class OverviewComponent implements OnInit {
       },
       error: (error: any) => {
         console.log("Overview failed", error);
+      }
+    });
+  }
+
+  keyUpChannelName(event: any) {
+    this.createChannelName = event.target.value;
+  }
+
+  handleCreateChannel(event: any) {
+    event.preventDefault();
+    this.apiService.overviewPost(this.createChannelName).subscribe({
+      next: (response: any) => {
+        console.log("Create channel successful", response);
+        this.isCreatingChannel = false;
+        this.getChannels();
+      },
+      error: (error: any) => {
+        console.log("Create channel failed", error);
       }
     });
   }
