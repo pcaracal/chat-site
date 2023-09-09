@@ -1,1 +1,8 @@
-<p>overview works!</p>
+<div class="container">
+  <div *ngIf="channels">
+    <h1>Your Channels</h1>
+    <div *ngFor="let cn of channels">
+      <button class="outline">{{cn.name}}</button>
+    </div>
+  </div>
+</div>

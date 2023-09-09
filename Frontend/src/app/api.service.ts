@@ -47,4 +47,12 @@ export class ApiService {
     }
     return this._http.get(this._apiUrl + "login", httpOptions);
   }
+
+  overviewGet(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({'Authorization': sessionStorage.getItem("Authorization") || ""})
+    }
+    return this._http.get(this._apiUrl + "overview", httpOptions);
+  }
 }
+
