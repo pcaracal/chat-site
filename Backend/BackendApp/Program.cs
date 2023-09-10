@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IOverviewRepository, OverviewRepository>();
+builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

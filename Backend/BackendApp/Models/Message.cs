@@ -11,7 +11,6 @@ public class Message : IMessage {
 
   public int fk_channel_id { get; set; }
 
-  // All args constructor, id not included and created_at is set to DateTime.Now
   public Message(string text, int fk_user_id, int fk_channel_id) {
     this.text = text;
     this.fk_user_id = fk_user_id;
