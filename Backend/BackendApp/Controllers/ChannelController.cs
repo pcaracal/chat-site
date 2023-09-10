@@ -21,7 +21,7 @@ namespace BackendApp.Controllers {
       _loginRepository = loginRepository;
     }
 
-    // TODO: POST api/channel adds an existing user to a channel
+
     // TODO: PATCH api/channel updates the channel name -- only admin can do this
     // TODO: DELETE api/channel deletes a channel -- only admin can do this
     // TODO: PUT api/channel deletes a user from a channel -- soft delete, user is only removed from channel but not from database
@@ -30,15 +30,41 @@ namespace BackendApp.Controllers {
     // GET: api/channel/{channelId}
     [HttpGet("{channelId}")]
     public IActionResult Get(int channelId) {
-      string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
-      int userId = _loginRepository.GetUser(username).id;
-      if (!_channelRepository.DoesChannelExistForUser(channelId, userId)) return NotFound();
+      try {
+        string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+        int userId = _loginRepository.GetUser(username).id;
+        if (!_channelRepository.DoesChannelExistForUser(channelId, userId)) return NotFound();
 
-      string channelName = _channelRepository.GetChannelNameById(channelId);
-      List<User> users = _channelRepository.GetUsersByChannelId(channelId);
-      List<Message> messages = _channelRepository.GetMessagesByChannelId(channelId);
+        string channelName = _channelRepository.GetChannelNameById(channelId);
+        List<User> users = _channelRepository.GetUsersByChannelId(channelId);
+        List<Message> messages = _channelRepository.GetMessagesByChannelId(channelId);
 
-      return Ok(new ChannelData(channelName, users, messages));
+        return Ok(new ChannelData(channelName, users, messages));
+      }
+      catch (Exception e) {
+        return BadRequest($"Error: {e.Message}");
+      }
+    }
+
+
+    // POST: api/channel/{channelId}
+    [HttpPost("{channelId}")]
+    public IActionResult Post(int channelId, [FromBody] AddUser addUser) {
+      try {
+        string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+        int userId = _loginRepository.GetUser(username).id;
+        if (!_channelRepository.DoesChannelExistForUser(channelId, userId)) return NotFound();
+        if (!_channelRepository.IsUserAdmin(channelId, userId)) return Unauthorized();
+
+        int addUserId = _loginRepository.GetUser(addUser.username).id;
+        if (_channelRepository.DoesChannelExistForUser(channelId, addUserId)) return NoContent();
+        _channelRepository.AddUserToChannel(channelId, addUserId);
+
+        return Ok();
+      }
+      catch (Exception e) {
+        return BadRequest($"Error: {e.Message}");
+      }
     }
   }
 }

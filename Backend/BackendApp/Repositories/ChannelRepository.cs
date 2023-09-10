@@ -34,4 +34,13 @@ public class ChannelRepository : IChannelRepository {
   public string GetChannelNameById(int channelId) {
     return _context.channel.First(c => c.id == channelId).name;
   }
+
+  public bool IsUserAdmin(int channelId, int userId) {
+    return _context.channel.First(c => c.id == channelId).fk_admin_id == userId;
+  }
+
+  public void AddUserToChannel(int channelId, int userId) {
+    _context.user_channel.Add(new UserChannel(userId, channelId));
+    _context.SaveChanges();
+  }
 }

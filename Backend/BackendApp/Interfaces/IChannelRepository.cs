@@ -9,4 +9,8 @@ public interface IChannelRepository {
   List<User> GetUsersByChannelId(int channelId);
 
   string GetChannelNameById(int channelId);
+
+  bool IsUserAdmin(int channelId, int userId);
+
+  void AddUserToChannel(int channelId, int userId);
 }
