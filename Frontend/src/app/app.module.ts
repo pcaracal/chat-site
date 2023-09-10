@@ -7,12 +7,14 @@ import {LoginComponent} from './login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {OverviewComponent} from './overview/overview.component';
+import { ChannelComponent } from './channel/channel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    OverviewComponent
+    OverviewComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule,
