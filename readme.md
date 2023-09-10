@@ -1,5 +1,7 @@
 # Le Chat - A communication website
+
 ## Folder Structure
-- `./backend/` - Node + Express Backend
-- `./frontend/` - React Frontend
+
+- `./backend/` - ASP.NET Core Backend
+- `./frontend/` - Angular Frontend
 - `./docs/` - Project Documentation

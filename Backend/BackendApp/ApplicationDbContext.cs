@@ -12,8 +12,4 @@ public class ApplicationDbContext : DbContext {
   public DbSet<Channel> channel { get; set; }
   public DbSet<Message> message { get; set; }
   public DbSet<UserChannel> user_channel { get; set; }
-
-  protected override void OnModelCreating(ModelBuilder modelBuilder) {
-    base.OnModelCreating(modelBuilder);
-  }
 }
