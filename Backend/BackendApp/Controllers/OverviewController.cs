@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackendApp.Interfaces;
+using BackendApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,13 +40,14 @@ namespace BackendApp.Controllers {
     ///  Creates a new channel
     /// </summary>
     [HttpPost]
-    public IActionResult Post([FromBody] string name) {
+    public IActionResult Post([FromBody] CreateChannel createChannel) {
+      string name = createChannel.name;
       string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
       int userId = _loginRepository.GetUser(username).id;
       if (_overviewRepository.doesChannelExist(name)) return Conflict("Channel already exists");
 
       _overviewRepository.createChannel(name, userId);
-      return Ok(name);
+      return Ok(createChannel);
     }
   }
 }

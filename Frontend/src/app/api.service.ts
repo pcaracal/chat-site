@@ -62,7 +62,9 @@ export class ApiService {
         'Content-Type': 'application/json'
       })
     }
-    return this._http.post(this._apiUrl + "overview", "\"" + channelName + "\"", httpOptions); // This is very cursed and needs to be fixed, but for now it works. The problem is probably in the backend trying to get a json value without a key
+    const body = {name: channelName};
+    console.log("body", body)
+    return this._http.post(this._apiUrl + "overview", body, httpOptions);
   }
 }
 
