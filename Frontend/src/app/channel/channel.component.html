@@ -5,14 +5,15 @@
     <div style="display: flex; flex-direction: column">
 
       <div *ngFor="let message of messages">
-        <strong>{{message.user}}</strong>: {{message.text}}
+        <strong>{{message.fk_user_id}}</strong>: {{message.text}}
       </div>
 
       <div class="container" style="position: absolute; bottom: 0;left: 0; right: 0">
         <form>
           <div style="display: flex; justify-content: space-between">
-            <input style="max-width: 84%" type="text"/>
-            <input style="max-width: 14%" type="submit" value="Send"/>
+            <input style="max-width: 84%" type="text" [(ngModel)]="newMessage" [ngModelOptions]="{standalone: true}"
+                   (keyup)="handleSendNewMessageKeyUp($event)"/>
+            <input style="max-width: 14%" type="submit" value="Send" (click)="handleSendMessage($event)"/>
           </div>
         </form>
       </div>
