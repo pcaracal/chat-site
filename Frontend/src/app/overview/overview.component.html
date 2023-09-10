@@ -6,7 +6,7 @@
     <div *ngIf="channels">
       <h2>Your Channels</h2>
       <div *ngFor="let cn of channels">
-        <button class="outline">{{cn.name}}</button>
+        <button class="outline" (click)="handleSelectChannel($event, cn.id)">{{cn.name + " <" + cn.id + ">"}}</button> <!-- The id is for debugging purposes -->
       </div>
     </div>
   </div>

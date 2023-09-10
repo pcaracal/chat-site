@@ -63,8 +63,14 @@ export class ApiService {
       })
     }
     const body = {name: channelName};
-    console.log("body", body)
     return this._http.post(this._apiUrl + "overview", body, httpOptions);
+  }
+
+  channelGet(channelId: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({'Authorization': sessionStorage.getItem("Authorization") || ""})
+    }
+    return this._http.get(this._apiUrl + "channel/" + channelId, httpOptions);
   }
 }
 

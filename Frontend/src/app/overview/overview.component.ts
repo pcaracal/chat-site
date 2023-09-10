@@ -55,4 +55,9 @@ export class OverviewComponent implements OnInit {
       }
     });
   }
+
+  handleSelectChannel(event: any, channelId: number) {
+    event.preventDefault();
+    this.router.navigate(["/channel/" + channelId]);
+  }
 }
