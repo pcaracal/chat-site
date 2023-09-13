@@ -32,7 +32,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
     });
 
     this.getChannelData();
-    interval(500)
+    interval(2000) // VERY BAD
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.getChannelData();
@@ -76,5 +76,14 @@ export class ChannelComponent implements OnInit, OnDestroy {
         console.log("Message post failed", error);
       }
     });
+  }
+
+  handleBackClick(event: any) {
+    event.preventDefault();
+    this.router.navigate(["/overview"]);
+  }
+
+  handleAddUserClick(event: any) {
+    event.preventDefault();
   }
 }

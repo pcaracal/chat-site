@@ -38,7 +38,7 @@ export class ApiService {
   }
 
 
-  // This function is temporary code delete it later
+  // This function is temporary code delete it later -- Not anymore just need to remove the button in login site
   loginGet(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({

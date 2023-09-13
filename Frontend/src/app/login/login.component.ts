@@ -18,6 +18,12 @@ export class LoginComponent {
     sessionStorage.setItem("Authorization", fullToken);
   }
 
+  setUserIdName(userId: string, username: string) {
+    sessionStorage.setItem("userId", userId);
+    sessionStorage.setItem("username", username);
+  }
+
+
   private _username: string = "";
   private _password: string = "";
   private _passwordRepeat: string = "";
@@ -55,6 +61,13 @@ export class LoginComponent {
         error: (error: any) => {
           // TODO: Handle stuff like 401
           // console.log("Login failed", error);
+        }
+      });
+
+      this.apiService.loginGet().subscribe({
+        next: (response: any) => {
+          console.log("Check login successful", response);
+          this.setUserIdName(response.userId, response.username);
         }
       });
     }

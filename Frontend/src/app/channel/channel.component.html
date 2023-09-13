@@ -1,7 +1,10 @@
-<div class="container">
-  <h2>{{channelName}}</h2>
+<div class="container" style="margin-top: 1rem">
   <div *ngIf="isMessageScreen">
-
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <button style="max-width: 49.5%" class="outline" (click)="handleBackClick($event)">Back</button>
+      <button style="max-width: 49.5%" class="outline" (click)="handleAddUserClick($event)">Add User</button>
+    </div>
+    <h2>{{channelName}}</h2>
     <div style="display: flex; flex-direction: column">
 
       <div *ngFor="let message of messages">
