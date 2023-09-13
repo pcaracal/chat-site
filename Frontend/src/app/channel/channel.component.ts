@@ -35,7 +35,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
     });
 
     this.getChannelData();
-    interval(10000) // VERY BAD
+    interval(500) // TODO: Replace this junk with a websocket
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.getChannelData();

@@ -94,4 +94,14 @@ export class ApiService {
     const body = {username: username};
     return this._http.post(this._apiUrl + "channel/" + channelId, body, httpOptions);
   }
+
+  userGet(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': sessionStorage.getItem("Authorization") || "",
+        'Content-Type': 'application/json'
+      })
+    }
+    return this._http.get(this._apiUrl + "user", httpOptions);
+  }
 }

@@ -82,10 +82,12 @@ export class LoginComponent {
       this.apiService.registerPost(e_username, e_password).subscribe({
         next: (response: any) => {
           console.log("Register successful", response);
-          this.setBearerToken(response.token);
+          this.isLogin = true;
+          // TODO: For some reason it never reaches here ??
+          // this.setBearerToken(response.token);
         },
         error: (error: any) => {
-          // TODO: Handle stuff like 401, 409, etc.
+          // TODO: Handle stuff like 409
         }
       });
     }
