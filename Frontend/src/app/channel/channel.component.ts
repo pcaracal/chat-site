@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../api.service';
 import {interval, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {IndividualConfig, ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-channel',
@@ -20,7 +21,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private _apiService: ApiService) {
+  constructor(private route: ActivatedRoute, private router: Router, private _apiService: ApiService, private _toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -60,7 +61,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
     });
 
     // TODO: 5. Display channel users
-    // TODO: 6. Display channel settings if the user is an admin
+    // TODO: 6. Display channel settings if the user is an admin -- Done mostly
   }
 
   handleSendNewMessageKeyUp(event: any) {
@@ -81,6 +82,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
         this.newUsername = "";
         this.isMessageScreen = true;
       }, error: (error: any) => {
+        this._toastr.error("User doesn't exist", "User add failed");
         console.log("User add failed", error);
       }
     });
