@@ -1,8 +1,11 @@
 <div class="container" style="margin-top: 1rem">
   <div *ngIf="isMessageScreen">
-    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <div *ngIf="isAdmin" style="display: flex; flex-direction: row; justify-content: space-between;">
       <button style="max-width: 49.5%" class="outline" (click)="handleBackClick($event)">Back</button>
       <button style="max-width: 49.5%" class="outline" (click)="handleAddUserClick($event)">Add User</button>
+    </div>
+    <div *ngIf="!isAdmin">
+      <button style="max-width: 100%" class="outline" (click)="handleBackClick($event)">Back</button>
     </div>
     <h2>{{channelName}}</h2>
     <div style="display: flex; flex-direction: column">
@@ -22,5 +25,12 @@
       </div>
 
     </div>
+  </div>
+  <div *ngIf="!isMessageScreen">
+    <button class="outline" (click)="returnToChannel($event)">Back</button>
+    <form>
+      <input type="text" (keyup)="handleAddUserKeyUp($event)" placeholder="Add new user"/>
+      <input type="submit" (click)="handleAddUserSubmit($event)" value="Add"/>
+    </form>
   </div>
 </div>

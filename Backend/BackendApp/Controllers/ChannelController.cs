@@ -38,8 +38,9 @@ namespace BackendApp.Controllers {
         string channelName = _channelRepository.GetChannelNameById(channelId);
         List<User> users = _channelRepository.GetUsersByChannelId(channelId);
         List<Message> messages = _channelRepository.GetMessagesByChannelId(channelId);
+        bool isAdmin = _channelRepository.IsUserAdmin(channelId, userId);
 
-        return Ok(new ChannelData(channelName, users, messages));
+        return Ok(new ChannelData(channelName, users, messages, isAdmin));
       }
       catch (Exception e) {
         return BadRequest($"Error: {e.Message}");
@@ -56,7 +57,10 @@ namespace BackendApp.Controllers {
         if (!_channelRepository.DoesChannelExistForUser(channelId, userId)) return NotFound();
         if (!_channelRepository.IsUserAdmin(channelId, userId)) return Unauthorized();
 
+        if (!_loginRepository.UserExists(addUser.username)) return NotFound();
+        // This fails if the user doesn't exist and returns a non explanatory error message
         int addUserId = _loginRepository.GetUser(addUser.username).id;
+
         if (_channelRepository.DoesChannelExistForUser(channelId, addUserId)) return NoContent();
         _channelRepository.AddUserToChannel(channelId, addUserId);
 
