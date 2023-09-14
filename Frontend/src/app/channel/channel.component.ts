@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../api.service';
 import {interval, Subject} from 'rxjs';
@@ -11,6 +11,19 @@ import {IndividualConfig, ToastrService} from "ngx-toastr";
   styleUrls: ['./channel.component.scss']
 })
 export class ChannelComponent implements OnInit, OnDestroy {
+  // @ts-ignore
+  @ViewChild('messageContainer') private _MessageContainer: ElementRef;
+
+  scrollToBottom(): void {
+    try {
+      setTimeout(() => {
+        this._MessageContainer.nativeElement.scrollTop = this._MessageContainer.nativeElement.scrollHeight;
+      }, 50);
+    } catch (err) {
+    }
+  }
+
+
   channelId: number = -1;
   channelName: string = "";
   isMessageScreen: boolean = true;
@@ -61,18 +74,20 @@ export class ChannelComponent implements OnInit, OnDestroy {
   }
 
   getChannelData() {
+    const oldMessages = this.messages;
     this._apiService.channelGet(this.channelId).subscribe({
       next: (response: any) => {
         // console.log("Channel data get successful", response);
         this.channelName = response.channelName;
         this.messages = response.messages;
         this.isAdmin = response.isAdmin;
+        if (oldMessages.length !== this.messages.length) {
+          this.scrollToBottom();
+        }
       }, error: (error: any) => {
         console.log("Channel data get failed", error);
       }
     });
-
-    // TODO: 5. Display channel users
     // TODO: 6. Display channel settings if the user is an admin -- Done mostly
   }
 
@@ -106,6 +121,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         console.log("Message post successful");
         this.messages.push(response);
+        this.scrollToBottom();
         this.getChannelData();
         this.newMessage = "";
       }, error: (error: any) => {
