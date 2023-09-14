@@ -32,7 +32,8 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
+      }),
+      responseType: 'text' as 'json'
     }
     return this._http.post(this._apiUrl + "register", body, httpOptions);
   }

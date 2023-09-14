@@ -78,13 +78,10 @@ export class LoginComponent {
     if (this._username.trim() && this._password && this.passwordRepeatValid) {
       const e_username: string = this._username.trim().toLowerCase();
       const e_password: string = this._password;
-
+      console.log("Registering, api not sent yet")
       this.apiService.registerPost(e_username, e_password).subscribe({
         next: (response: any) => {
-          console.log("Register successful", response);
           this.isLogin = true;
-          // TODO: For some reason it never reaches here ??
-          // this.setBearerToken(response.token);
         },
         error: (error: any) => {
           // TODO: Handle stuff like 409
