@@ -18,6 +18,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
   newMessage: string = "";
   isAdmin: boolean = false;
   newUsername: string = "";
+  users: Map<number, string> = new Map<number, string>();
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -32,6 +33,17 @@ export class ChannelComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(params => {
       this.channelId = params['id'];
+    });
+
+    this._apiService.userGet().subscribe({
+      next: (response: any) => {
+        response.forEach((user: any) => {
+          this.users.set(user.id, user.username);
+        });
+        console.log("Cat", this.users);
+      }, error: (error: any) => {
+        console.log("User get failed", error);
+      }
     });
 
     this.getChannelData();

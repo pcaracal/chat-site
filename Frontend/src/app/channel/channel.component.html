@@ -10,10 +10,11 @@
     <h2>{{channelName}}</h2>
     <div style="display: flex; flex-direction: column">
 
-      <div *ngFor="let message of messages">
-        <strong>{{message.fk_user_id}}</strong>: {{message.text}}
+      <div style="max-height: 60vh; overflow-y: scroll">
+        <div *ngFor="let message of messages"> <!-- Put this into a vertical scroller -->
+          <strong>{{users.get(message.fk_user_id)}}</strong>: {{message.text}}
+        </div>
       </div>
-
       <div class="container" style="position: absolute; bottom: 0;left: 0; right: 0">
         <form>
           <div style="display: flex; justify-content: space-between">
