@@ -7,7 +7,8 @@
     <div *ngIf="!isAdmin">
       <button style="max-width: 100%" class="outline" (click)="handleBackClick($event)">Back</button>
     </div>
-    <h2>{{channelName}}</h2>
+    <h2 style="margin-bottom: 0.5rem">{{channelName}}</h2>
+    <hr/>
     <div style="display: flex; flex-direction: column">
 
       <div class="message-container" #messageContainer>
