@@ -56,18 +56,19 @@ export class LoginComponent {
         next: (response: any) => {
           console.log("Login successful", response);
           this.setBearerToken(response.token);
+
+          this.apiService.loginGet().subscribe({
+            next: (response: any) => {
+              console.log("Check login successful", response);
+              this.setUserIdName(response.userId, response.username);
+            }
+          });
+
           this.router.navigate(["/overview"]);
         },
         error: (error: any) => {
           // TODO: Handle stuff like 401
           // console.log("Login failed", error);
-        }
-      });
-
-      this.apiService.loginGet().subscribe({
-        next: (response: any) => {
-          console.log("Check login successful", response);
-          this.setUserIdName(response.userId, response.username);
         }
       });
     }

@@ -7,10 +7,11 @@
     <div *ngIf="!isAdmin">
       <button style="max-width: 100%" class="outline" (click)="handleBackClick($event)">Back</button>
     </div>
-    <h2>{{channelName}}</h2>
+    <h2 style="margin-bottom: 0.5rem">{{channelName}}</h2>
+    <hr/>
     <div style="display: flex; flex-direction: column">
 
-      <div #messageContainer style="max-height: 55vh; overflow-y: scroll">
+      <div class="message-container" #messageContainer>
         <div *ngFor="let message of messages">
           <strong>{{users.get(message.fk_user_id)}}</strong>: {{message.text}}
         </div>

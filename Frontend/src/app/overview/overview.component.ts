@@ -44,7 +44,10 @@ export class OverviewComponent implements OnInit {
 
   handleCreateChannel(event: any) {
     event.preventDefault();
-    this.apiService.overviewPost(this.createChannelName).subscribe({
+    if (this.createChannelName.trim() === "") {
+      return;
+    }
+    this.apiService.overviewPost(this.createChannelName.trim()).subscribe({
       next: (response: any) => {
         console.log("Create channel successful", response);
         this.isCreatingChannel = false;
@@ -54,6 +57,12 @@ export class OverviewComponent implements OnInit {
         console.log("Create channel failed", error);
       }
     });
+  }
+
+  handleCancelCreateChannel(event: any) {
+    event.preventDefault();
+    this.createChannelName = "";
+    this.isCreatingChannel = false;
   }
 
   handleSelectChannel(event: any, channelId: number) {
