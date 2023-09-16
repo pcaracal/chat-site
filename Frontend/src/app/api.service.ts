@@ -32,13 +32,14 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
+      }),
+      responseType: 'text' as 'json'
     }
     return this._http.post(this._apiUrl + "register", body, httpOptions);
   }
 
 
-  // This function is temporary code delete it later
+  // This function is temporary code delete it later -- Not anymore just need to remove the button in login site
   loginGet(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -83,5 +84,25 @@ export class ApiService {
     const body = {text: text, channelId: channelId};
     return this._http.post(this._apiUrl + "message", body, httpOptions);
   }
-}
 
+  channelPost(channelId: number, username: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': sessionStorage.getItem("Authorization") || "",
+        'Content-Type': 'application/json'
+      })
+    }
+    const body = {username: username};
+    return this._http.post(this._apiUrl + "channel/" + channelId, body, httpOptions);
+  }
+
+  userGet(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': sessionStorage.getItem("Authorization") || "",
+        'Content-Type': 'application/json'
+      })
+    }
+    return this._http.get(this._apiUrl + "user", httpOptions);
+  }
+}

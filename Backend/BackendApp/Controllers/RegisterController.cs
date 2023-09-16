@@ -24,7 +24,7 @@ namespace BackendApp.Controllers {
       string hashedPassword = _loginRepository.GenerateArgon2Hash(login.password);
       _loginRepository.AddUser(new Login(login.username, hashedPassword));
 
-      return Created("api/register", "User created");
+      return Ok("User created");
     }
   }
 }

@@ -18,8 +18,9 @@ namespace BackendApp.Controllers {
     [Authorize(AuthenticationSchemes = "Bearer")]
     public IActionResult Get() {
       string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+      int userId = _loginRepository.GetUser(username).id;
       try {
-        return Ok(new { username });
+        return Ok(new { username, userId });
       }
       catch (Exception e) {
         return BadRequest($"Error: {e.Message}");

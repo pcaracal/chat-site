@@ -7,7 +7,8 @@ import {LoginComponent} from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {OverviewComponent} from './overview/overview.component';
-import { ChannelComponent } from './channel/channel.component';
+import {ChannelComponent} from './channel/channel.component';
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ChannelComponent } from './channel/channel.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

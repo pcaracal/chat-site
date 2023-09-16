@@ -18,6 +18,12 @@ export class LoginComponent {
     sessionStorage.setItem("Authorization", fullToken);
   }
 
+  setUserIdName(userId: string, username: string) {
+    sessionStorage.setItem("userId", userId);
+    sessionStorage.setItem("username", username);
+  }
+
+
   private _username: string = "";
   private _password: string = "";
   private _passwordRepeat: string = "";
@@ -57,6 +63,13 @@ export class LoginComponent {
           // console.log("Login failed", error);
         }
       });
+
+      this.apiService.loginGet().subscribe({
+        next: (response: any) => {
+          console.log("Check login successful", response);
+          this.setUserIdName(response.userId, response.username);
+        }
+      });
     }
   }
 
@@ -65,14 +78,13 @@ export class LoginComponent {
     if (this._username.trim() && this._password && this.passwordRepeatValid) {
       const e_username: string = this._username.trim().toLowerCase();
       const e_password: string = this._password;
-
+      console.log("Registering, api not sent yet")
       this.apiService.registerPost(e_username, e_password).subscribe({
         next: (response: any) => {
-          console.log("Register successful", response);
-          this.setBearerToken(response.token);
+          this.isLogin = true;
         },
         error: (error: any) => {
-          // TODO: Handle stuff like 401, 409, etc.
+          // TODO: Handle stuff like 409
         }
       });
     }

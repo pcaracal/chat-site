@@ -20,6 +20,7 @@
     "@angular/router": "^16.2.0",
     "bcryptjs": "^2.4.3",
     "js-sha256": "^0.10.1",
+    "ngx-toastr": "^17.0.2",
     "rxjs": "^7.8.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
