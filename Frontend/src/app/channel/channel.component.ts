@@ -18,7 +18,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
     try {
       setTimeout(() => {
         this._MessageContainer.nativeElement.scrollTop = this._MessageContainer.nativeElement.scrollHeight;
-      }, 50);
+      }, 100);
     } catch (err) {
     }
   }
@@ -108,6 +108,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
         this.getChannelData();
         this.newUsername = "";
         this.isMessageScreen = true;
+        this._toastr.success("User added", "User add successful");
       }, error: (error: any) => {
         this._toastr.error("User doesn't exist", "User add failed");
         console.log("User add failed", error);
@@ -126,6 +127,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
         this.newMessage = "";
       }, error: (error: any) => {
         console.log("Message post failed", error);
+        this._toastr.error("Message post failed", "Unknown error");
       }
     });
   }
