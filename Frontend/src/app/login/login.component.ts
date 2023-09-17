@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {sha256} from "js-sha256";
 import {ApiService} from "../api.service";
-import * as bcrypt from "bcryptjs";
 import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +9,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor(private apiService: ApiService, private router: Router) {
+  constructor(private apiService: ApiService, private router: Router, private _toastr: ToastrService) {
   }
 
   setBearerToken(token: string) {
@@ -65,10 +64,10 @@ export class LoginComponent {
           });
 
           this.router.navigate(["/overview"]);
+          this._toastr.success("Login successful", "Welcome back");
         },
         error: (error: any) => {
-          // TODO: Handle stuff like 401
-          // console.log("Login failed", error);
+          this._toastr.error("Username or password incorrect", "Login failed");
         }
       });
     }
@@ -83,9 +82,11 @@ export class LoginComponent {
       this.apiService.registerPost(e_username, e_password).subscribe({
         next: (response: any) => {
           this.isLogin = true;
+          this._toastr.success("Registration successful", "Welcome");
         },
         error: (error: any) => {
           // TODO: Handle stuff like 409
+          this._toastr.error("Username already exists", "Registration failed");
         }
       });
     }
