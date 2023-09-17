@@ -18,7 +18,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
     try {
       setTimeout(() => {
         this._MessageContainer.nativeElement.scrollTop = this._MessageContainer.nativeElement.scrollHeight;
-      }, 100);
+      }, 500);
     } catch (err) {
     }
   }
@@ -32,6 +32,8 @@ export class ChannelComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
   newUsername: string = "";
   users: Map<number, string> = new Map<number, string>();
+  isEditingChannelName: boolean = false;
+  newChannelName: string = "";
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -145,5 +147,42 @@ export class ChannelComponent implements OnInit, OnDestroy {
   handleAddUserClick(event: any) {
     event.preventDefault();
     this.isMessageScreen = false;
+  }
+
+  handleChannelNameKeyUp(event: any) {
+    this.newChannelName = event.target.value.trim() || "";
+  }
+
+  handleChannelNameSubmit(event: any) {
+    event.preventDefault();
+    if (!this.newChannelName) return;
+    if (this.newChannelName === this.channelName) {
+      this.isEditingChannelName = false;
+      return;
+    }
+
+    this._apiService.channelPatch(this.channelId, this.newChannelName).subscribe({
+      next: (response: any) => {
+        console.log("Channel name patch successful");
+        this.getChannelData();
+        this.isEditingChannelName = false;
+        this._toastr.success("Channel name changed", "Success");
+      },
+      error: (error: any) => {
+        this._toastr.error("Channel name already exists", "Error");
+      }
+    });
+  }
+
+  handleChannelNameClick(event: any) {
+    event.preventDefault();
+    this.newChannelName = this.channelName;
+    this.isEditingChannelName = true;
+  }
+
+  handleChannelNameCancel(event: any) {
+    event.preventDefault();
+    this.newChannelName = this.channelName;
+    this.isEditingChannelName = false;
   }
 }
