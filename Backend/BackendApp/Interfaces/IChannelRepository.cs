@@ -13,4 +13,6 @@ public interface IChannelRepository {
   bool IsUserAdmin(int channelId, int userId);
 
   void AddUserToChannel(int channelId, int userId);
+
+  void UpdateChannelName(int channelId, string newName);
 }

@@ -43,4 +43,10 @@ public class ChannelRepository : IChannelRepository {
     _context.user_channel.Add(new UserChannel(userId, channelId));
     _context.SaveChanges();
   }
+
+  public void UpdateChannelName(int channelId, string newName) {
+    Channel channel = _context.channel.First(c => c.id == channelId);
+    channel.name = newName;
+    _context.SaveChanges();
+  }
 }

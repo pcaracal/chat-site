@@ -22,7 +22,6 @@ namespace BackendApp.Controllers {
     }
 
 
-    // TODO: PATCH api/channel updates the channel name -- only admin can do this
     // TODO: DELETE api/channel deletes a channel -- only admin can do this
     // TODO: PUT api/channel deletes a user from a channel -- soft delete, user is only removed from channel but not from database
 
@@ -64,6 +63,27 @@ namespace BackendApp.Controllers {
         if (_channelRepository.DoesChannelExistForUser(channelId, addUserId)) return NoContent();
         _channelRepository.AddUserToChannel(channelId, addUserId);
 
+        return Ok();
+      }
+      catch (Exception e) {
+        return BadRequest($"Error: {e.Message}");
+      }
+    }
+    
+    
+    
+    // TODO: PATCH api/channel updates the channel name -- only admin can do this
+    // PATCH: api/channel/{channelId}
+    [HttpPatch("{channelId}")]
+    public IActionResult Patch(int channelId, [FromBody] UpdateChannel updateChannel) {
+      try {
+        string username = _loginRepository.DecodeJwtToken(Request.Headers["Authorization"][0].Split(" ")[1]);
+        int userId = _loginRepository.GetUser(username).id;
+        if (!_channelRepository.DoesChannelExistForUser(channelId, userId)) return NotFound();
+        if (!_channelRepository.IsUserAdmin(channelId, userId)) return Unauthorized();
+
+        _channelRepository.UpdateChannelName(channelId, updateChannel.name);
+        
         return Ok();
       }
       catch (Exception e) {
