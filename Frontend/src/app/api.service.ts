@@ -105,4 +105,15 @@ export class ApiService {
     }
     return this._http.get(this._apiUrl + "user", httpOptions);
   }
+
+  channelPatch(channelId: number, channelName: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': sessionStorage.getItem("Authorization") || "",
+        'Content-Type': 'application/json'
+      })
+    }
+    const body = {name: channelName};
+    return this._http.patch(this._apiUrl + "channel/" + channelId, body, httpOptions);
+  }
 }
