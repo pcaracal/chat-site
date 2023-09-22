@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
 import {ToastrService} from "ngx-toastr";
+import {interval} from "rxjs";
 
 @Component({
   selector: 'app-overview',
@@ -25,7 +26,13 @@ export class OverviewComponent implements OnInit {
       this.router.navigate(["/"]);
     }
     this.getChannels();
+
+    interval(1000).subscribe(() => {
+      this.getChannels();
+    });
   }
+
+
 
   getChannels() {
     this.apiService.overviewGet().subscribe({
