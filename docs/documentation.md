@@ -12,6 +12,9 @@
 - Users can directly message other users, may be encrypted in some way
 - Users which a user has directly messaged before are saved and also shown in the channel overview
 
+## Usecase Diagram
+![usecase diagram](usecases/usecaseChatsite.drawio.svg)
+
 ## Mockups / Wireframes
 
 ### Login
