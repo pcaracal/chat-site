@@ -1,0 +1,13 @@
+services:
+  angular:
+    build:
+      context: Frontend
+      target: builder
+  nginx:
+    build:
+      context: Frontend
+      target: nginx
+    depends_on:
+      - angular
+    ports:
+      - 80:80
