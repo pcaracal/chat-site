@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,react,rider,csharp,momentics,aspnetcore,dotnetcore,visualstudiocode,angular
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,react,rider,csharp,momentics,aspnetcore,dotnetcore,visualstudiocode,angular
 
+
+build/
+
 ### Angular ###
 ## Angular ##
 # compiled output

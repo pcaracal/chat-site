@@ -4,6 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +22,18 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="publish\web.config" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+      <_ContentIncludedByDefault Remove="publish\BackendApp.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\BackendApp.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="publish\build\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="publish\build\appsettings.json" />
+      <_ContentIncludedByDefault Remove="publish\build\BackendApp.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\build\BackendApp.runtimeconfig.json" />
     </ItemGroup>
 
 </Project>
