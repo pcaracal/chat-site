@@ -17,6 +17,15 @@ class Program {
 
 
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    string aspNetCoreUrls = Environment.GetEnvironmentVariable("ASPNETCORE_CONNECTIONSTRINGS_DEFAULTCONNECTION");
+    string host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+
+    if (aspNetCoreUrls != null) {
+      connectionString = aspNetCoreUrls;
+
+      connectionString = "Host=" + host + ";" + connectionString;
+    }
+
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
 // init.sql

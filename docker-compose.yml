@@ -3,6 +3,9 @@ services:
     build:
       context: Frontend
       target: builder
+    depends_on:
+      - backendapp
+
   nginx:
     build:
       context: Frontend
@@ -10,4 +13,33 @@ services:
     depends_on:
       - angular
     ports:
-      - 80:80
+      - 8000:80
+
+  db:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: chat_db_user
+      POSTGRES_PASSWORD: chat_db_pw
+      POSTGRES_ROOT_PASSWORD: chat_db_root_pw
+      POSTGRES_DB: chatsitedb
+    expose:
+      - 5432
+
+  backendapp:
+    build:
+      context: ./Backend/
+      dockerfile: BackendApp/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5147
+      - POSTGRES_HOST=db
+      - ASPNETCORE_CONNECTIONSTRINGS_DEFAULTCONNECTION=Port=5432;Database=chatsitedb;Username=chat_db_user;Password=chat_db_pw;
+    depends_on:
+      - db
+    ports:
+      - 5147:5147
+
+volumes:
+  db-data:
