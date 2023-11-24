@@ -1,0 +1,23 @@
+<div class="container">
+  <div *ngIf="!isCreatingChannel">
+    <h2>Create a channel</h2>
+    <button (click)="isCreatingChannel = !isCreatingChannel">Create</button>
+
+    <div *ngIf="channels">
+      <h2>Your Channels</h2>
+      <div *ngFor="let cn of channels">
+        <button class="outline" (click)="handleSelectChannel($event, cn.id)">{{cn.name + " <" + cn.id + ">"}}</button>
+        <!-- The id is for debugging purposes -->
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isCreatingChannel">
+    <h2>Create a channel</h2>
+    <form>
+      <input id="createChannelName" type="text" placeholder="Channel Name" required (keyup)="keyUpChannelName($event)">
+      <input type="submit" role="button" value="Create" (click)="handleCreateChannel($event)">
+    </form>
+    <button class="outline" (click)="handleCancelCreateChannel($event)">Cancel</button>
+  </div>
+</div>

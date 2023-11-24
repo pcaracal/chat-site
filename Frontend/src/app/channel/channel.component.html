@@ -1,0 +1,58 @@
+<div class="container" style="margin-top: 1rem">
+  <div *ngIf="isMessageScreen">
+
+    <div *ngIf="isAdmin">
+      <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <button style="max-width: 49.5%" class="outline" (click)="handleBackClick($event)">Back</button>
+        <button style="max-width: 49.5%" class="outline" (click)="handleAddUserClick($event)">Add User</button>
+      </div>
+
+      <div *ngIf="isEditingChannelName">
+        <form style="display: flex; flex-direction: row; justify-content: space-between;">
+          <input style="max-width: 75%" type="text" [(ngModel)]="newChannelName" [ngModelOptions]="{standalone: true}"
+                 (keyup)="handleChannelNameKeyUp($event)"/>
+          <input style="max-width: 12%" type="submit" (click)="handleChannelNameSubmit($event)" value="Save"/>
+          <input style="max-width: 12%" type="button" class="outline" (click)="handleChannelNameCancel($event)"
+                 value="Cancel"/>
+        </form>
+      </div>
+
+      <div *ngIf="!isEditingChannelName" (click)="handleChannelNameClick($event)">
+        <h2 style="margin-bottom: 0.5rem; cursor: pointer">{{channelName}}</h2>
+      </div>
+    </div>
+
+    <div *ngIf="!isAdmin">
+      <button style="max-width: 100%" class="outline" (click)="handleBackClick($event)">Back</button>
+      <h2 style="margin-bottom: 0.5rem">{{channelName}}</h2>
+    </div>
+
+    <hr/>
+
+    <div style="display: flex; flex-direction: column">
+
+      <div class="message-container" #messageContainer>
+        <div *ngFor="let message of messages">
+          <strong>{{users.get(message.fk_user_id)}}</strong>: {{message.text}}
+        </div>
+      </div>
+      <div class="container" style="position: absolute; bottom: 0;left: 0; right: 0">
+        <form>
+          <div style="display: flex; justify-content: space-between">
+            <input style="max-width: 84%" type="text" [(ngModel)]="newMessage" [ngModelOptions]="{standalone: true}"
+                   (keyup)="handleSendNewMessageKeyUp($event)"/>
+            <input style="max-width: 14%" type="submit" value="Send" (click)="handleSendMessage($event)"/>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="!isMessageScreen">
+    <button class="outline" (click)="returnToChannel($event)">Back</button>
+    <form>
+      <input type="text" (keyup)="handleAddUserKeyUp($event)" placeholder="Add new user"/>
+      <input type="submit" (click)="handleAddUserSubmit($event)" value="Add"/>
+    </form>
+  </div>
+</div>
